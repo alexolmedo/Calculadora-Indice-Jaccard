@@ -30,4 +30,3 @@ with open('ZINC_chemicals.tsv','rb') as tsvIn, open('solution_jaccard.tsv', 'wb'
                     elementosComunes += min (arreglo[i][1][caracter],arreglo[j][1][caracter])
             tsvOut.write(arreglo[i][0] + "\t" + arreglo[j][0] + "\t" + "{0:.2f}".format(float(elementosComunes) / (arreglo[i][2]+arreglo[j][2] - elementosComunes)) + "\n")
 
-            print "{0:.2f}".format(float(elementosComunes) / (arreglo[i][2]+arreglo[j][2] - elementosComunes))
