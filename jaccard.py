@@ -1,24 +1,29 @@
 import csv
 import collections
-import multiprocessing
+from multiprocessing import Pool
+import os
+import time
 
-
-def calculojaccard (hilo, numHilos):
+def calculojaccard (i):
+    linea = ''
     global arregloCompuestos
-    for i in range(hilo, len(arregloCompuestos), numHilos):
-        for j in range(i+1, len(arregloCompuestos)):
-            elementosComunes = 0
-            for caracter in arregloCompuestos[i][1]:
-                if (arregloCompuestos[j][1].has_key(caracter)):
-                    elementosComunes += min (arregloCompuestos[i][1][caracter], arregloCompuestos[j][1][caracter])
-            # Calculo y escritura a archivo del indice de Jaccard
-            indiceJaccard = float(elementosComunes) / (arregloCompuestos[i][2] + arregloCompuestos[j][2] - elementosComunes)
-            with open('solution_python.tsv', 'ab') as tsvOut:
-                tsvOut.write(arregloCompuestos[i][0] + "\t" + arregloCompuestos[j][0] + "\t" + "{0:.2f}".format(indiceJaccard) + "\n")
+    for j in range(i+1, len(arregloCompuestos)):
+        elementosComunes = 0
+        for caracter in arregloCompuestos[i][1]:
+            if (arregloCompuestos[j][1].has_key(caracter)):
+                elementosComunes += min (arregloCompuestos[i][1][caracter], arregloCompuestos[j][1][caracter])
+        # Calculo del indice de Jaccard
+        indiceJaccard = float(elementosComunes) / (arregloCompuestos[i][2] + arregloCompuestos[j][2] - elementosComunes)
+        linea += arregloCompuestos[i][0] + "\t" + arregloCompuestos[j][0] + "\t" + "{0:.2f}".format(indiceJaccard) + "\n"
+    return linea
 
+with open('ZINC_chemicals_test.tsv','rb') as tsvIn:
+    # Crear un archivo vacio de soluciones
+    open('solution_jaccard.tsv', 'w').close()
 
-with open('ZINC_chemicals.tsv','rb') as tsvIn:
     tsvIn = csv.reader(tsvIn, delimiter='\t')
+    inicio = time.time()
+
     global arregloCompuestos
     arregloCompuestos = []
 
@@ -40,16 +45,12 @@ with open('ZINC_chemicals.tsv','rb') as tsvIn:
         arregloCompuestos[i].append(numElementos)
 
     # Escribir etiquetas de cada columna
-    with open('solution_python.tsv', 'wb') as tsvOut:
-        tsvOut.write("compound_a\tcompound_b\tvalue\n")
+    tsvOut = open('solution_jaccard.tsv', 'ab')
+    tsvOut.write("compound_a\tcompound_b\tvalue\n")
 
-    nucleos = multiprocessing.cpu_count()
-    procesos = []
+    pool = Pool()
+    for resultado in pool.map(calculojaccard, range(len(arregloCompuestos))):
+        tsvOut.write(resultado)
 
-    for nucleo in range(nucleos):
-        proceso = multiprocessing.Process(target=calculojaccard, args=(nucleo, nucleos))
-        procesos.append(proceso)
-        procesos[-1].start()
-
-    for proceso in procesos:
-        proceso.join()
+    fin = time.time()
+    print fin - inicio
