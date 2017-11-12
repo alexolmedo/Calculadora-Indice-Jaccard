@@ -17,7 +17,7 @@ def calculojaccard (i):
         linea += arregloCompuestos[i][0] + "\t" + arregloCompuestos[j][0] + "\t" + "{0:.2f}".format(indiceJaccard) + "\n"
     return linea
 
-with open('ZINC_chemicals_test.tsv','rb') as tsvIn:
+with open('ZINC_chemicals.tsv','rb') as tsvIn:
     # Crear un archivo vacio de soluciones
     open('solution_jaccard.tsv', 'w').close()
 
@@ -53,4 +53,4 @@ with open('ZINC_chemicals_test.tsv','rb') as tsvIn:
         tsvOut.write(resultado)
 
     fin = time.time()
-    print fin - inicio
+    print fin - inicio, " segundos"
