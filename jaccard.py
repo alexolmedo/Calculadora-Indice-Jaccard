@@ -16,12 +16,11 @@ def calculojaccard (i):
         linea += arregloCompuestos[i][0] + "\t" + arregloCompuestos[j][0] + "\t" + "{0:.2f}".format(indiceJaccard) + "\n"
     return linea
 
-with open('ZINC_chemicals_test.tsv','rb') as tsvIn:
+with open('ZINC_chemicals.tsv','rb') as tsvIn:
+    inicio = time.time()
     # Crear un archivo vacio de soluciones
     open('solution_python.tsv', 'w').close()
-
     tsvIn = csv.reader(tsvIn, delimiter='\t')
-    inicio = time.time()
 
     global arregloCompuestos
     arregloCompuestos = []

@@ -18,7 +18,7 @@ int main()
     inicio = std::clock();
     //Llenar vector con nombre del compuesto y su string
     vector<vector<string>> compuestos;
-    ifstream input("ZINC_chemicals_test.tsv");
+    ifstream input("ZINC_chemicals.tsv");
     char const limite_linea = '\n';
     char const limite_campo = '\t';
 
@@ -66,7 +66,7 @@ int main()
         compuestos[i].push_back(to_string(numElementos));
     }
     
-    //Calcular el coeficiente de jaccard
+    //Calcular el coeficiente de jaccard y escribir a archivo
     FILE* fout = fopen("solution_cpp.tsv", "w");
     fprintf(fout, "compound_a\tcompound_b\tvalue\n");
     for (int i=0; i<compuestos.size(); i++){
@@ -86,18 +86,5 @@ int main()
     fclose(fout);
     duracion = ( std::clock() - inicio ) / (double) CLOCKS_PER_SEC;
     cout<< duracion <<" segundos\n";
-    
-
-
-    //Imprimir todos los elementos del vector
-    /*for (int i=0; i<compuestos.size();i++){
-        cout << compuestos[i][1] + " " + compuestos[i][2] ;
-        cout << endl;
-        for(map<char,int>::const_iterator it = mapCaracteres[i].begin();
-        it != mapCaracteres[i].end(); ++it)
-        {
-            std::cout << it->first << " " << it->second << "\n";
-        }*
-    }*/
 
 }
