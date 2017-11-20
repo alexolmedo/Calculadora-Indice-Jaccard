@@ -25,7 +25,7 @@ int main()
             index++;            
         }
     }
-    //Llenar vector con frecuencia de cada caracter
+    //Llenar otro vector con frecuencia de cada caracter
     vector <map<char,int>> mapCaracteres;
     for (int i=0; i<compuestos.size();i++){
         map <char, int> elementos;
@@ -36,9 +36,35 @@ int main()
         mapCaracteres.push_back(elementos);
     }
 
+    //Eliminar caracteres no válidos del diccionario de frecuencias
+    char noValidos[]={'[', ']', '(', ')', '-', '+', '=', '/'};
+    for (int i=0; i<mapCaracteres.size();i++){
+        for(const char &letra : noValidos){
+            mapCaracteres[i].erase(letra);
+        }
+    }
+
+    //Agregar el numero total de elementos al arreglo
+    int numElementos = 0;
+    for (int i=0; i<mapCaracteres.size();i++){
+        for(map<char,int>::const_iterator it = mapCaracteres[i].begin();
+        it != mapCaracteres[i].end(); ++it){
+            numElementos += it->second ;
+        }
+        compuestos[i].push_back(to_string(numElementos));
+        numElementos = 0;
+    }
+
+
     //Imprimir todos los elementos del vector
     for (int i=0; i<compuestos.size();i++){
-        cout << compuestos[i][1] + " ";
+        cout << compuestos[i][1] + " " + compuestos[i][2] ;
         cout << endl;
+        for(map<char,int>::const_iterator it = mapCaracteres[i].begin();
+        it != mapCaracteres[i].end(); ++it)
+        {
+            std::cout << it->first << " " << it->second << "\n";
+        }
     }
+
 }
