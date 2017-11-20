@@ -7,11 +7,15 @@
 #include <algorithm> 
 #include <iomanip>
 #include <cstdio>
+#include <ctime>
 
 using namespace std;
 
 int main() 
 {
+    std::clock_t inicio;
+    double duracion;
+    inicio = std::clock();
     //Llenar vector con nombre del compuesto y su string
     vector<vector<string>> compuestos;
     ifstream input("ZINC_chemicals_test.tsv");
@@ -79,7 +83,9 @@ int main()
             fprintf(fout, "\n");
         }
     }
-    fclose(fout);    
+    fclose(fout);
+    duracion = ( std::clock() - inicio ) / (double) CLOCKS_PER_SEC;
+    cout<< duracion <<" segundos\n";
     
 
 
