@@ -5,6 +5,7 @@
 #include <sstream>
 #include <map>
 #include <algorithm> 
+#include <iomanip>
 
 using namespace std;
 
@@ -60,6 +61,7 @@ int main()
         compuestos[i].push_back(to_string(numElementos));
     }
     
+    //Calcular el coeficiente de jaccard
     for (int i=0; i<compuestos.size(); i++){
         for(int j=i+1; j<compuestos.size(); j++){
             int elementosComunes = 0;
@@ -69,7 +71,9 @@ int main()
                     elementosComunes += min(mapCaracteres[i][it->first],mapCaracteres[j][it->first]);
                 }
             }
-            cout << compuestos[i][1] << " , " << compuestos[j][1]<<" , "<<elementosComunes<<endl;
+            double indiceJaccard = elementosComunes / (atof(compuestos[i][2].c_str())+atof(compuestos[j][2].c_str())-elementosComunes);
+            cout << compuestos[i][0] << " , " << compuestos[j][0]<<" , ";
+            std::cout << std::fixed << std::setprecision(2) << indiceJaccard << endl;
         }
     }
 
