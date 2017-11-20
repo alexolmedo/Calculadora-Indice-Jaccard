@@ -19,7 +19,7 @@ def calculojaccard (i):
 
 with open('ZINC_chemicals.tsv','rb') as tsvIn:
     # Crear un archivo vacio de soluciones
-    open('solution_jaccard.tsv', 'w').close()
+    open('solution_python.tsv', 'w').close()
 
     tsvIn = csv.reader(tsvIn, delimiter='\t')
     inicio = time.time()
@@ -45,7 +45,7 @@ with open('ZINC_chemicals.tsv','rb') as tsvIn:
         arregloCompuestos[i].append(numElementos)
 
     # Escribir etiquetas de cada columna
-    tsvOut = open('solution_jaccard.tsv', 'ab')
+    tsvOut = open('solution_python.tsv', 'ab')
     tsvOut.write("compound_a\tcompound_b\tvalue\n")
 
     pool = Pool()
