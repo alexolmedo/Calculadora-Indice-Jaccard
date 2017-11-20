@@ -6,6 +6,7 @@
 #include <map>
 #include <algorithm> 
 #include <iomanip>
+#include <cstdio>
 
 using namespace std;
 
@@ -62,6 +63,8 @@ int main()
     }
     
     //Calcular el coeficiente de jaccard
+    FILE* fout = fopen("solution_cpp.tsv", "w");
+    fprintf(fout, "compound_a\tcompound_b\tvalue\n");
     for (int i=0; i<compuestos.size(); i++){
         for(int j=i+1; j<compuestos.size(); j++){
             int elementosComunes = 0;
@@ -72,12 +75,11 @@ int main()
                 }
             }
             double indiceJaccard = elementosComunes / (atof(compuestos[i][2].c_str())+atof(compuestos[j][2].c_str())-elementosComunes);
-            cout << compuestos[i][0] << " , " << compuestos[j][0]<<" , ";
-            std::cout << std::fixed << std::setprecision(2) << indiceJaccard << endl;
+            fprintf(fout, "%s\t%s\t%.2f", compuestos[i][0].c_str(), compuestos[j][0].c_str(),indiceJaccard);
+            fprintf(fout, "\n");
         }
     }
-
-    
+    fclose(fout);    
     
 
 
