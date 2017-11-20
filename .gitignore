@@ -2,6 +2,8 @@ solution_python.tsv
 solution_c.tsv
 .vscode
 jaccard
+test
+test.cpp
 
 
 # User-specific stuff:

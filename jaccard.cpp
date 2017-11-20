@@ -3,11 +3,13 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <map>
 
 using namespace std;
 
 int main() 
 {
+    //Llenar vector con nombre del compuesto y su string
     vector<vector<string>> compuestos;
     ifstream input("ZINC_chemicals_test.tsv");
     char const limite_linea = '\n';
@@ -23,12 +25,20 @@ int main()
             index++;            
         }
     }
+    //Llenar vector con frecuencia de cada caracter
+    vector <map<char,int>> mapCaracteres;
+    for (int i=0; i<compuestos.size();i++){
+        map <char, int> elementos;
+        int longitud = compuestos[i][1].length();
+        for(int j=0; j < longitud; j++){
+            ++elementos[compuestos[i][1][j]] ;
+        }
+        mapCaracteres.push_back(elementos);
+    }
 
     //Imprimir todos los elementos del vector
     for (int i=0; i<compuestos.size();i++){
-        for (int j=0; j<compuestos[i].size();j++){
-            cout << compuestos[i][j] + " ";
-        }
+        cout << compuestos[i][1] + " ";
         cout << endl;
     }
 }
