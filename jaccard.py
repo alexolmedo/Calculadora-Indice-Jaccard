@@ -26,7 +26,7 @@ with open('ZINC_chemicals.tsv','rb') as tsvIn:
     arregloCompuestos = []
 
     for indice, compuesto in enumerate(tsvIn):
-        # Ignorar primera linea del archivo, agregar diccionario con la frecuencia de todos los caracteres al arreglo
+        # Ignorar primera linea del archivo, agregar nombre y diccionario con la frecuencia de todos los caracteres al arreglo
         if indice != 0:
             arregloCompuestos.append([compuesto[1], collections.Counter(compuesto[3])])
 

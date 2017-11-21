@@ -56,7 +56,7 @@ int main()
         }
     }
 
-    //Agregar el numero total de elementos al arreglo
+    //Agregar el numero total de elementos al vector
     for (int i=0; i<mapCaracteres.size(); i++){
         int numElementos = 0;
         for(map<char,int>::const_iterator it = mapCaracteres[i].begin();
