@@ -49,7 +49,7 @@ int main()
     }
 
     //Eliminar caracteres no válidos del diccionario de frecuencias
-    char noValidos[]={'[', ']', '(', ')', '-', '+', '=', '/'};
+    char noValidos[]={'[', ']', '(', ')', '-', '+', '=', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
     for (int i=0; i<mapCaracteres.size();i++){
         for(const char &letra : noValidos){
             mapCaracteres[i].erase(letra);
@@ -69,6 +69,8 @@ int main()
     //Calcular el coeficiente de jaccard y escribir a archivo
     FILE* fout = fopen("solution_cpp.tsv", "w");
     fprintf(fout, "compound_a\tcompound_b\tvalue\n");
+
+    #pragma omp parallel for num_threads(4)
     for (int i=0; i<compuestos.size(); i++){
         for(int j=i+1; j<compuestos.size(); j++){
             int elementosComunes = 0;
@@ -79,12 +81,12 @@ int main()
                 }
             }
             double indiceJaccard = elementosComunes / (atof(compuestos[i][2].c_str())+atof(compuestos[j][2].c_str())-elementosComunes);
-            fprintf(fout, "%s\t%s\t%.2f", compuestos[i][0].c_str(), compuestos[j][0].c_str(),indiceJaccard);
-            fprintf(fout, "\n");
+            fprintf(fout, "%s\t%s\t%.2f\n", compuestos[i][0].c_str(), compuestos[j][0].c_str(),indiceJaccard);
         }
     }
     fclose(fout);
     duracion = ( std::clock() - inicio ) / (double) CLOCKS_PER_SEC;
-    cout<< duracion <<" segundos\n";
+    cout << duracion <<" segundos\n";
+    cout << duracion/60 <<" minutos\n";
 
 }

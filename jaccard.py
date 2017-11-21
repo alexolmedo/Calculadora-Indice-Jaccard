@@ -33,7 +33,7 @@ with open('ZINC_chemicals.tsv','rb') as tsvIn:
     for i in range(len(arregloCompuestos)):
 
         # Remover simbolos y otros caracteres del diccionario
-        for simbolo in ['[', ']', '(', ')', '-', '+', '=', '/']:
+        for simbolo in ['[', ']', '(', ')', '-', '+', '=', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
             del arregloCompuestos[i][1][simbolo]
 
         # Agregar el numero total de elementos al arreglo
@@ -52,3 +52,4 @@ with open('ZINC_chemicals.tsv','rb') as tsvIn:
 
     fin = time.time()
     print fin - inicio, " segundos"
+    print (fin - inicio)/60, " minutos"
