@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <cstdio>
 #include <ctime>
+#include <list>
 
 using namespace std;
 
@@ -66,7 +67,9 @@ int main()
         compuestos[i].push_back(to_string(numElementos));
     }
     
-    //Calcular el coeficiente de jaccard y escribir a archivo
+    //Calcular el coeficiente de jaccard y guardar a una lista de strings
+    std::list<std::string> listaResultado;
+    std::list<std::string>::iterator it;
     FILE* fout = fopen("solution_cpp.tsv", "w");
     fprintf(fout, "compound_a\tcompound_b\tvalue\n");
 
@@ -81,10 +84,21 @@ int main()
                 }
             }
             double indiceJaccard = elementosComunes / (atof(compuestos[i][2].c_str())+atof(compuestos[j][2].c_str())-elementosComunes);
-            fprintf(fout, "%s\t%s\t%.2f\n", compuestos[i][0].c_str(), compuestos[j][0].c_str(),indiceJaccard);
+            //Tomar solo dos decimales
+            stringstream stream;
+            stream << fixed << setprecision(2) << indiceJaccard;
+            string dosDecimales = stream.str();
+            listaResultado.push_back(compuestos[i][0]+"\t"+compuestos[j][0]+"\t"+dosDecimales+"\n");
         }
     }
+    //Ordenar la lista
+    listaResultado.sort();
+    //Escribir a archivo
+    for (it=listaResultado.begin(); it!=listaResultado.end(); ++it){
+        fprintf(fout, "%s", (*it).c_str());
+    }
     fclose(fout);
+        
     duracion = ( std::clock() - inicio ) / (double) CLOCKS_PER_SEC;
     cout << duracion <<" segundos\n";
     cout << duracion/60 <<" minutos\n";
