@@ -8,7 +8,6 @@
 #include <iomanip>
 #include <cstdio>
 #include <ctime>
-#include <list>
 
 using namespace std;
 
@@ -19,7 +18,7 @@ int main()
     inicio = std::clock();
     //Llenar vector con nombre del compuesto y su string
     vector<vector<string>> compuestos;
-    ifstream input("ZINC_chemicals.tsv");
+    ifstream input("ZINC_chemicals_test.tsv");
     char const limite_linea = '\n';
     char const limite_campo = '\t';
 
@@ -67,9 +66,8 @@ int main()
         compuestos[i].push_back(to_string(numElementos));
     }
     
-    //Calcular el coeficiente de jaccard y guardar a una lista de strings
-    std::list<std::string> listaResultado;
-    std::list<std::string>::iterator it;
+    //Calcular el coeficiente de jaccard y guardar a un vector de strings
+    vector<string> resultados;
     FILE* fout = fopen("solution_cpp.tsv", "w");
     fprintf(fout, "compound_a\tcompound_b\tvalue\n");
 
@@ -88,14 +86,13 @@ int main()
             stringstream stream;
             stream << fixed << setprecision(2) << indiceJaccard;
             string dosDecimales = stream.str();
-            listaResultado.push_back(compuestos[i][0]+"\t"+compuestos[j][0]+"\t"+dosDecimales+"\n");
+
+            resultados.push_back(compuestos[i][0]+"\t"+compuestos[j][0]+"\t"+dosDecimales+"\n");
         }
     }
-    //Ordenar la lista
-    listaResultado.sort();
     //Escribir a archivo
-    for (it=listaResultado.begin(); it!=listaResultado.end(); ++it){
-        fprintf(fout, "%s", (*it).c_str());
+    for (int i=0; i<resultados.size();i++){
+        fprintf(fout, "%s", resultados[i].c_str());
     }
     fclose(fout);
         
