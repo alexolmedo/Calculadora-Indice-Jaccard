@@ -8,17 +8,25 @@
 #include <iomanip>
 #include <cstdio>
 #include <ctime>
+#include <omp.h>
 
 using namespace std;
+vector<vector<string>> compuestos;
+vector <map<char,int>> mapCaracteres;
+std::string res;
 
 int main() 
 {
+    //Mostrar hora de inicio
+    time_t now = time(0);
+    tm* horaLocal = localtime(&now);
+    cout << "Hora de inicio: " << asctime(horaLocal) << endl;
+
     std::clock_t inicio;
     double duracion;
     inicio = std::clock();
     //Llenar vector con nombre del compuesto y su string
-    vector<vector<string>> compuestos;
-    ifstream input("ZINC_chemicals_test.tsv");
+    ifstream input("ZINC_chemicals.tsv");
     char const limite_linea = '\n';
     char const limite_campo = '\t';
 
@@ -38,7 +46,6 @@ int main()
         numLinea++;
     }
     //Llenar otro vector con frecuencia de cada caracter
-    vector <map<char,int>> mapCaracteres;
     for (int i=0; i<compuestos.size();i++){
         map <char, int> elementos;
         int longitud = compuestos[i][1].length();
@@ -66,12 +73,12 @@ int main()
         compuestos[i].push_back(to_string(numElementos));
     }
     
-    //Calcular el coeficiente de jaccard y guardar a un vector de strings
-    vector<string> resultados;
+    //Calcular el coeficiente de jaccard y hacer append a un string
+    
     FILE* fout = fopen("solution_cpp.tsv", "w");
     fprintf(fout, "compound_a\tcompound_b\tvalue\n");
-
-    #pragma omp parallel for num_threads(4)
+    omp_set_num_threads(4);
+    #pragma omp for ordered schedule(static,4)
     for (int i=0; i<compuestos.size(); i++){
         for(int j=i+1; j<compuestos.size(); j++){
             int elementosComunes = 0;
@@ -86,18 +93,16 @@ int main()
             stringstream stream;
             stream << fixed << setprecision(2) << indiceJaccard;
             string dosDecimales = stream.str();
-
-            resultados.push_back(compuestos[i][0]+"\t"+compuestos[j][0]+"\t"+dosDecimales+"\n");
+            //Guardar los resultados en orden
+            #pragma omp ordered 
+            res.append(compuestos[i][0]+"\t"+compuestos[j][0]+"\t"+dosDecimales+"\n");
         }
     }
-    //Escribir a archivo
-    for (int i=0; i<resultados.size();i++){
-        fprintf(fout, "%s", resultados[i].c_str());
-    }
+    //Escribir string de resultados a archivo
+    fprintf(fout, "%s", res.c_str());
     fclose(fout);
         
     duracion = ( std::clock() - inicio ) / (double) CLOCKS_PER_SEC;
     cout << duracion <<" segundos\n";
     cout << duracion/60 <<" minutos\n";
-
 }

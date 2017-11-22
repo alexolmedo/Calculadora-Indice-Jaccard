@@ -1,7 +1,8 @@
 import csv
 import collections
-from multiprocessing import Pool
 import time
+from multiprocessing import Pool
+from datetime import datetime
 
 def calculojaccard (i):
     linea = ''
@@ -17,6 +18,7 @@ def calculojaccard (i):
     return linea
 
 with open('ZINC_chemicals.tsv','rb') as tsvIn:
+    print "Hora de inicio: ", str(datetime.now())
     inicio = time.time()
     # Crear un archivo vacio de soluciones
     open('solution_python.tsv', 'w').close()
